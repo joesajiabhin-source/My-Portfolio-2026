@@ -2,6 +2,8 @@
 
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SmoothScroll from "@/components/SmoothScroll";
 import Preloader from "@/components/Preloader";
 import CustomCursor from "@/components/CustomCursor";
@@ -19,8 +21,13 @@ const Scene = dynamic(() => import("@/components/Scene"), { ssr: false });
 export default function Page() {
   // Mark app ready if preloader was skipped via reduced motion
   useEffect(() => {
-    const onReady = () => (window.__appReady = true);
+    const onReady = () => {
+      window.__appReady = true;
+      // recalculates pin heights / trigger positions after fonts settle
+      ScrollTrigger.refresh();
+    };
     window.addEventListener("app:ready", onReady, { once: true });
+    window.addEventListener("load", () => ScrollTrigger.refresh());
     return () => window.removeEventListener("app:ready", onReady);
   }, []);
 
@@ -35,12 +42,18 @@ export default function Page() {
         <main className="relative">
           <Hero />
           <About />
-          <FilmStrip rotate={-2.4} offset={0} speed={12} panels={8} />
+          <div className="relative z-20 my-2 md:my-4">
+            <FilmStrip rotate={-2.4} offset={0} speed={12} panels={8} />
+          </div>
           <Skills />
-          <FilmStrip rotate={2.2} offset={3} speed={16} panels={9} />
+          <div className="relative z-20 my-2 md:my-4">
+            <FilmStrip rotate={2.2} offset={3} speed={16} panels={9} />
+          </div>
           <Projects />
           <Experience />
-          <FilmStrip rotate={-1.8} offset={1} speed={10} panels={8} />
+          <div className="relative z-20 my-2 md:my-4">
+            <FilmStrip rotate={-1.8} offset={1} speed={10} panels={8} />
+          </div>
           <Contact />
         </main>
       </div>

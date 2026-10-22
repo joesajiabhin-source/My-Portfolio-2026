@@ -40,7 +40,7 @@ function PanelIcon({ name, className = "h-16 w-16 md:h-20 md:w-20", color }) {
   if (name === "brain")
     return (
       <svg viewBox="0 0 100 100" className={className} aria-hidden="true">
-        <g stroke="#050508" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+        <g stroke="#000000" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
           <path d="M50 14 q-22 -6 -28 12 q-14 4 -10 20 q-12 10 2 22 q0 16 18 14 q6 12 18 4 q12 8 18 -4 q18 2 18 -14 q14 -12 2 -22 q4 -16 -10 -20 q-6 -18 -28 -12 z" fill={color} />
           <path d="M50 22 v56 M36 34 q-8 6 -2 14 M64 34 q8 6 2 14 M34 58 q-6 8 4 12 M66 58 q6 8 -4 12" fill="none" />
         </g>
@@ -49,7 +49,7 @@ function PanelIcon({ name, className = "h-16 w-16 md:h-20 md:w-20", color }) {
   if (name === "cube")
     return (
       <svg viewBox="0 0 100 100" className={className} aria-hidden="true">
-        <g stroke="#050508" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none">
+        <g stroke="#000000" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none">
           <path d="M50 8 L88 28 v44 L50 92 L12 72 V28 Z" fill={color} />
           <path d="M50 8 v40 m0 0 L12 28 M50 48 L88 28 M50 48 v44" />
         </g>
@@ -57,9 +57,9 @@ function PanelIcon({ name, className = "h-16 w-16 md:h-20 md:w-20", color }) {
     );
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true">
-      <g stroke="#050508" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+      <g stroke="#000000" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
         <path d="M50 6 q20 12 16 44 l8 12 -14 -4 q-4 14 -10 22 q-6 -8 -10 -22 l-14 4 8 -12 q-4 -32 16 -44 z" fill={color} />
-        <circle cx="50" cy="38" r="9" fill="#050508" />
+        <circle cx="50" cy="38" r="9" fill="#000000" />
         <path d="M42 80 q-6 8 -4 14 M58 80 q6 8 4 14 M50 84 v12" fill="none" />
       </g>
     </svg>
@@ -131,8 +131,10 @@ export default function Projects() {
       const nums = gsap.utils.toArray("[data-prog-num]");
       const dots = gsap.utils.toArray("[data-prog-dot]");
       panels.forEach((_, i) => {
-        tl.to(nums, { opacity: (j) => (j === i ? 1 : 0.3), duration: 0.2 }, i);
-        tl.to(dots, { scale: (j) => (j === i ? 1.6 : 1), duration: 0.2 }, i);
+        if (i > 0) {
+          tl.to(nums, { opacity: (j) => (j === i ? 1 : 0.3), duration: 0.2 }, i - 1 + 0.5);
+          tl.to(dots, { scale: (j) => (j === i ? 1.6 : 1), duration: 0.2 }, i - 1 + 0.5);
+        }
       });
     });
 
@@ -200,7 +202,7 @@ export default function Projects() {
           <article
             key={p.id}
             data-panel
-            className="relative flex min-h-[96vh] flex-col justify-center px-5 py-28 will-transform md:col-start-1 md:row-start-1 md:min-h-0 md:h-full md:px-10 [grid-area:stage]"
+            className="relative flex min-h-[96vh] flex-col justify-center px-5 py-28 will-transform md:col-start-1 md:row-start-1 md:min-h-0 md:h-full md:px-10 md:[grid-area:stage]"
             style={{ zIndex: i + 1 }}
           >
             <div className="mx-auto w-full max-w-6xl">
@@ -222,7 +224,7 @@ export default function Projects() {
                   >
                     {p.title.split(" ").map((word, wi) => (
                       <span key={wi} className="block">
-                        {wi === 1 ? <span style={{ color: "#050508" }}>{word}</span> : word}
+                        {wi === 1 ? <span style={{ color: "#000000" }}>{word}</span> : word}
                       </span>
                     ))}
                   </h3>
@@ -248,7 +250,7 @@ export default function Projects() {
                     className="frame relative overflow-hidden rounded-[28px] p-1"
                     style={{ transform: `rotate(${i % 2 ? 2.5 : -2.5}deg)` }}
                   >
-                    <div className="relative rounded-[22px] bg-gradient-to-b from-[#171726] to-[#050508] p-6">
+                    <div className="relative rounded-[22px] bg-gradient-to-b from-[#000000] to-[#000000] p-6">
                       <div className="flex items-center justify-between">
                         <p className="font-mono text-[9px] font-bold tracking-[0.3em] text-paper/50">
                           CASE&nbsp;FILE&nbsp;{p.id}

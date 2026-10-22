@@ -44,24 +44,33 @@ export default function Skills() {
         const tilt = TILTS[i % TILTS.length];
         gsap.fromTo(
           el,
-          { y: 140, opacity: 0, rotate: tilt * 5, scale: 0.8 },
+          { y: 120, opacity: 0, rotate: tilt * 4, scale: 0.85 },
           {
             y: 0,
             opacity: 1,
             rotate: tilt,
             scale: 1,
             duration: 0.9,
-            delay: (i % 4) * 0.09,
-            ease: "back.out(1.6)",
-            scrollTrigger: { trigger: el, start: "top 94%" },
+            delay: (i % 4) * 0.08,
+            ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 92%" },
           }
         );
-        // each card keeps drifting at its own speed — parallax even at rest
-        gsap.to(el, {
-          y: tilt * -9,
-          ease: "none",
-          scrollTrigger: { trigger: rootRef.current, start: "top bottom", end: "bottom top", scrub: true },
-        });
+        // progress bar fills as the card enters
+        const bar = el.querySelector("[data-skill-bar]");
+        if (bar) {
+          gsap.fromTo(
+            bar,
+            { scaleX: 0 },
+            {
+              scaleX: 1,
+              duration: 1.1,
+              delay: 0.25 + (i % 4) * 0.08,
+              ease: "power3.out",
+              scrollTrigger: { trigger: el, start: "top 92%" },
+            }
+          );
+        }
       });
 
       // outline backdrop travel
@@ -138,7 +147,7 @@ export default function Skills() {
           </span>
           <span className="mask-line">
             <span className="inline-block text-[clamp(3rem,11vw,9rem)] will-transform">
-              <span style={{ color: "#050508" }}>WEAPONS</span>
+              <span style={{ color: "#000000" }}>WEAPONS</span>
             </span>
           </span>
         </h2>
@@ -166,8 +175,9 @@ export default function Skills() {
                   <p className="mt-1 font-body text-xs text-paper/60 md:text-sm">{skill.detail}</p>
                   <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-white/10">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-lime to-blush transition-transform duration-700 ease-out group-hover:scale-x-100"
-                      style={{ width: `${skill.level}%`, transform: "scaleX(0.55)", transformOrigin: "left" }}
+                      data-skill-bar
+                      className="h-full w-full origin-left rounded-full bg-gradient-to-r from-lime to-blush"
+                      style={{ transform: "scaleX(0)", width: `${skill.level}%` }}
                     />
                   </div>
                 </div>

@@ -83,7 +83,7 @@ function DustLayer({ count, spread, size, color, opacity, speed, depth }) {
 }
 
 /* ---------------- Floaty doodle shapes ---------------- */
-function FloatShape({ kind = "knot", position, color = "#050508", speed = 1, drift = 1 }) {
+function FloatShape({ kind = "knot", position, color = "#000000", speed = 1, drift = 1 }) {
   const mesh = useRef();
 
   useFrame((state) => {

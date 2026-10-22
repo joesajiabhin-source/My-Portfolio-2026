@@ -44,7 +44,7 @@ export default function CustomCursor() {
 
       if (labeled) {
         label.textContent = labeled.dataset.cursorLabel;
-        gsap.to(ring, { scale: 3.1, backgroundColor: "rgba(10,10,18,0.9)", borderColor: "rgba(10,10,18,1)", duration: 0.35, ease: "power3.out" });
+        gsap.to(ring, { scale: 3.1, backgroundColor: "rgba(0,0,0,0.9)", borderColor: "rgba(0,0,0,1)", duration: 0.35, ease: "power3.out" });
         gsap.to(label, { opacity: 1, duration: 0.25 });
       } else if (hoverable) {
         gsap.to(ring, { scale: 1.8, backgroundColor: "rgba(60,255,0,0.25)", duration: 0.35, ease: "power3.out" });

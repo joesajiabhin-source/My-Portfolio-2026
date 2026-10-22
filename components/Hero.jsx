@@ -18,7 +18,7 @@ function Starburst({ className = "", fill = "#3cff00", style }) {
       <path
         d="M50 0l9.8 30.6L90 14.6 71.8 43.4 100 50l-28.2 6.6L90 85.4l-30.2-16L50 100l-9.8-30.6L10 85.4l18.2-28.8L0 50l28.2-6.6L10 14.6l30.2 16z"
         fill={fill}
-        stroke="#050508"
+        stroke="#000000"
         strokeWidth="3"
       />
     </svg>
@@ -35,7 +35,7 @@ function GlowOrb({ className = "", style }) {
           <stop offset="100%" stopColor="#2a1573" />
         </radialGradient>
       </defs>
-      <circle cx="50" cy="50" r="46" fill="url(#orb)" stroke="#050508" strokeWidth="4" />
+      <circle cx="50" cy="50" r="46" fill="url(#orb)" stroke="#000000" strokeWidth="4" />
       <circle cx="34" cy="32" r="10" fill="#ffffff" opacity="0.9" />
     </svg>
   );
@@ -44,7 +44,7 @@ function GlowOrb({ className = "", style }) {
 function InlineCat({ className = "", style }) {
   return (
     <svg viewBox="0 0 160 200" className={className} style={style} aria-hidden="true">
-        <g stroke="#050508" strokeLinejoin="round" strokeLinecap="round">
+        <g stroke="#000000" strokeLinejoin="round" strokeLinecap="round">
         {/* ears swept back in determination */}
         <path d="M40 74 L26 30 L70 52 Z" fill="#ffffff" strokeWidth="5" />
         <path d="M120 74 L134 30 L90 52 Z" fill="#ffffff" strokeWidth="5" />
@@ -53,15 +53,15 @@ function InlineCat({ className = "", style }) {
         {/* head */}
         <circle cx="80" cy="112" r="56" fill="#ffffff" strokeWidth="5" />
         {/* eyes — angry-cute slits */}
-        <path d="M50 110 Q58 103 67 109 Q59 117 50 110 Z" fill="#050508" strokeWidth="0" />
-        <path d="M93 109 Q102 103 110 110 Q101 117 93 109 Z" fill="#050508" strokeWidth="0" />
+        <path d="M50 110 Q58 103 67 109 Q59 117 50 110 Z" fill="#000000" strokeWidth="0" />
+        <path d="M93 109 Q102 103 110 110 Q101 117 93 109 Z" fill="#000000" strokeWidth="0" />
         {/* angry brows */}
         <path d="M48 96 L68 102 M112 96 L92 102" strokeWidth="4" fill="none" />
         {/* tear drops */}
         <path d="M44 82 q5 8 0 12 q-5 -4 0 -12" fill="#8fd6ff" strokeWidth="0" />
         <path d="M116 82 q5 8 0 12 q-5 -4 0 -12" fill="#8fd6ff" strokeWidth="0" />
         {/* nose + mouth */}
-        <path d="M76 126 h8 l-4 6 z" fill="#050508" strokeWidth="0" />
+        <path d="M76 126 h8 l-4 6 z" fill="#000000" strokeWidth="0" />
         <path d="M80 132 q-4 5 -9 3 M80 132 q4 5 9 3" fill="none" strokeWidth="3.5" />
         {/* whiskers */}
         <path d="M34 122 L10 118 M36 130 L12 136 M126 122 L150 118 M124 130 L148 136" strokeWidth="3" fill="none" />
@@ -76,7 +76,7 @@ function InlineCat({ className = "", style }) {
 function FrontPaws({ className = "", style }) {
   return (
     <svg viewBox="0 0 160 70" className={className} style={style} aria-hidden="true">
-      <g stroke="#050508" strokeWidth="4.5" fill="#ffffff" strokeLinecap="round">
+      <g stroke="#000000" strokeWidth="4.5" fill="#ffffff" strokeLinecap="round">
         {/* left paw draped over the ledge */}
         <path d="M30 2 q-18 2 -18 18 q0 18 14 22 q14 4 22 -4 q8 -8 4 -22 q-4 -14 -22 -14 z" />
         <path d="M22 8 l-4 -5 M30 4 l-2 -6 M38 3 l1 -6" fill="none" />
@@ -97,6 +97,13 @@ function TickerItems() {
     </span>
   );
 }
+
+/* hover paint for the giant hero letters — duotone comic gradients */
+const LETTER_PAINT = [
+  "linear-gradient(175deg, #3cff00 12%, #ffcf3f 88%)",
+  "linear-gradient(175deg, #f6a8d7 12%, #ffcf3f 88%)",
+  "linear-gradient(175deg, #f5f5f3 10%, #f6a8d7 90%)",
+];
 
 export default function Hero() {
   const rootRef = useRef(null);
@@ -133,8 +140,11 @@ export default function Hero() {
          If the user loops back to the hero from deep in the page, elements
          must already be visible — the scrub timeline controls them then. */
       const intro = gsap.timeline({ paused: true });
+      let introStarted = false;
 
       const startIntro = () => {
+        if (introStarted) return;
+        introStarted = true;
         const heroVisible = window.scrollY < window.innerHeight * 0.6;
         if (!heroVisible) {
           // the letters live above the pin anyway — keep them visible by
@@ -143,6 +153,7 @@ export default function Hero() {
           const end = gsap.timeline();
           end
             .set(".hero-letter", { opacity: 1, yPercent: 0, rotate: 0 })
+            .set(".hero-ghost, .hero-chip, [data-stamp]", { opacity: 1, scale: 1, y: 0 })
             .set("[data-hero-cat], [data-float], [data-hero-tl], [data-hero-tr], [data-hero-bottom]", { opacity: 1 })
             .set("[data-hero-ticker]", { yPercent: 0 })
             .set("[data-hero-frame]", { scale: 1, y: 0 });
@@ -157,16 +168,27 @@ export default function Hero() {
           )
           .fromTo(
             ".hero-letter",
-            { yPercent: 110, rotate: (i) => [-8, 6, -5][i] || 0, opacity: 0 },
+            { yPercent: 110, opacity: 0 },
             {
               yPercent: 0,
-              rotate: 0,
               opacity: 1,
               duration: 1.1,
               stagger: 0.09,
-              ease: "back.out(1.4)",
+              ease: "back.out(1.5)",
             },
             0.15
+          )
+          .fromTo(
+            ".hero-ghost",
+            { y: 44, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.8, stagger: 0.12, ease: "power3.out" },
+            0.75
+          )
+          .fromTo(
+            ".hero-chip, [data-stamp]",
+            { scale: 0, opacity: 0, rotate: () => gsap.utils.random(-30, 30) },
+            { scale: 1, opacity: 1, rotate: 0, duration: 0.6, stagger: 0.09, ease: "back.out(2.2)" },
+            0.9
           )
           .fromTo(
             "[data-hero-cat]",
@@ -200,10 +222,25 @@ export default function Hero() {
       if (window.__appReady) startIntro();
       else window.addEventListener("app:ready", startIntro, { once: true });
 
-      // fall-back: after 2.5s regardless, make sure nothing got stuck hidden
-      const introspect = window.setTimeout(() => {
-        if (!intro.isActive() && intro.progress() === 0) startIntro();
-      }, 2500);
+      // fall-back: after 4.5s regardless, make sure nothing got stuck hidden.
+      // Also polls every second — if the intro timeline is sitting at its
+      // START state (rAF froze during the preloader / tab was hidden), snap
+      // it to the end so the hero is never left blank.
+      const ensureVisible = () => {
+        if (intro.progress() === 0 && !intro.isActive()) startIntro();
+        else if (!intro.isActive() && intro.progress() < 1) intro.progress(1);
+      };
+      const introspect = window.setInterval(() => {
+        const frame = document.querySelector("[data-hero-frame]");
+        const stuck =
+          frame &&
+          getComputedStyle(frame).opacity === "0" &&
+          !intro.isActive();
+        if (stuck || (intro.progress() === 0 && !introStarted)) ensureVisible();
+        else if (introStarted && !intro.isActive() && intro.progress() < 1) {
+          intro.progress(1);
+        }
+      }, 1000);
 
       /* ---------- ONE PINNED TRACK: stage + reveal + finale ---------- */
       const trackTl = gsap.timeline({
@@ -226,22 +263,24 @@ export default function Hero() {
       });
 
         trackTl
-        // ACT I — the stage lives: letters split into depth layers
+        // ACT I — the stage lives: sticker tiles split into depth layers
         .to("[data-hero-frame]", { scale: 1.04, ease: "none", duration: 0.28 }, 0)
-        .to(letterRefs.current[0], { y: "-3vh", rotate: -1.5, ease: "none", duration: 0.28 }, 0)
-        .to(letterRefs.current[1], { y: "2vh", scale: 1.04, ease: "none", duration: 0.28 }, 0)
-        .to(letterRefs.current[2], { y: "-4vh", rotate: 2, ease: "none", duration: 0.28 }, 0)
+        .to(letterRefs.current[0], { y: "-3vh", rotate: -3, ease: "none", duration: 0.28 }, 0)
+        .to(letterRefs.current[1], { y: "2vh", scale: 1.05, ease: "none", duration: 0.28 }, 0)
+        .to(letterRefs.current[2], { y: "-4vh", rotate: 2.5, ease: "none", duration: 0.28 }, 0)
+        .to(".hero-ghost", { letterSpacing: "0.06em", ease: "none", duration: 0.28 }, 0)
+        .to("[data-stamp]", { rotate: 14, scale: 1.12, ease: "none", duration: 0.28 }, 0)
         .to("[data-float='a']", { y: -110, x: -45, rotate: -16, ease: "none", duration: 0.28 }, 0)
         .to("[data-float='b']", { y: -80, x: 60, rotate: 20, ease: "none", duration: 0.28 }, 0)
         .to("[data-float='c']", { y: -130, x: 26, rotate: 11, ease: "none", duration: 0.28 }, 0)
         .to("[data-float='d']", { y: -60, x: -80, rotate: -24, ease: "none", duration: 0.28 }, 0)
         .to("[data-float='e']", { y: -95, x: 80, rotate: 30, ease: "none", duration: 0.28 }, 0)
         .to("[data-hero-cat]", { y: 24, rotate: 4, ease: "none", duration: 0.2 }, 0)
-        // ACT II — letters drift apart in depth, never leaving the stage
+        // ACT II — stickers drift apart in depth, never leaving the stage
         .to(letterRefs.current[0], { y: "-2.5vh", rotate: -2, scale: 1.04, ease: "none", duration: 0.2 }, 0.28)
         .to(letterRefs.current[1], { y: "2vh", scale: 1.06, ease: "none", duration: 0.2 }, 0.28)
         .to(letterRefs.current[2], { y: "-3.5vh", rotate: 2.5, scale: 1.04, ease: "none", duration: 0.2 }, 0.28)
-        .to(".hero-letter", { opacity: 0.38, ease: "power1.in", duration: 0.2 }, 0.34)
+        .to(".hero-letter, .hero-ghost, .hero-chip, [data-stamp]", { opacity: 0, ease: "power1.in", duration: 0.18 }, 0.34)
         .to("[data-hero-cat]", { y: -340, opacity: 0, rotate: -18, ease: "power2.in", duration: 0.16 }, 0.3)
         .to("[data-float]", { opacity: 0, y: "-=90", ease: "power1.in", duration: 0.16 }, 0.3)
         .to("[data-hero-tl], [data-hero-tr], [data-hero-ticker], [data-hero-bottom]", {
@@ -270,8 +309,9 @@ export default function Hero() {
           { scale: 1.15, opacity: 1, ease: "power1.in", duration: 0.34 },
           0.56
         )
-        // ACT IV — let go: fade the full stage into the about chapter
-        .to(pinRef.current, { opacity: 0, scale: 0.96, ease: "power1.in", duration: 0.22 }, 0.78);
+        // ACT IV — hold the reveal on screen while the stage unpins;
+        // About then slides over it naturally (hero content stays sticky).
+        .to({}, { duration: 0.22 }, 0.78);
     }, rootRef);
 
     /* ---------- pointer parallax across depth layers ---------- */
@@ -299,7 +339,7 @@ export default function Hero() {
     tickerBand?.addEventListener("mouseleave", resumeTicker);
 
     return () => {
-      window.clearTimeout(introspect);
+      window.clearInterval(introspect);
       marqueeTween?.kill();
       ctx.revert();
       window.removeEventListener("mousemove", onMove);
@@ -308,16 +348,13 @@ export default function Hero() {
     };
   }, []);
 
-  const letters = ["A", "J", "S"];
-
-  return (
-    <section
+  return (    <section
       ref={rootRef}
       id="top"
       className="relative z-10 h-[380svh]"
     >
       {/* pinned stage */}
-      <div ref={pinRef} className="relative flex h-[100svh] flex-col overflow-hidden bg-red">
+      <div ref={pinRef} className="sticky top-0 z-20 flex h-[100svh] flex-col overflow-hidden bg-red">
         {/* subtle print texture on the red */}
         <div className="halftone pointer-events-none absolute inset-0 opacity-25" aria-hidden="true" />
         <div
@@ -380,26 +417,30 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* ================= THE AJS LETTERS ================= */}
-          <div className="relative z-10 flex flex-1 items-center justify-center px-4">
-            <div className="flex items-end justify-center gap-[1.2vw]" style={{ perspective: "900px" }}>
-              {letters.map((l, i) => (
+          {/* ================= THE GIANT AJS LETTERS ================= */}
+          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4">
+            <div className="flex items-end justify-center gap-[0.6vw] md:gap-[1.2vw]" style={{ perspective: "900px" }}>
+              {["A", "J", "S"].map((l, i) => (
                 <div
                   key={l}
                   data-layer={i === 1 ? 0.55 : 0.9}
                   className="group/letter relative will-transform"
                   data-cursor-label={["ABHIN", "JOE", "SAJI"][i]}
                 >
-                  <div
-                    ref={(el) => (letterRefs.current[i] = el)}
-                    className="will-transform"
-                  >
+                  <div ref={(el) => (letterRefs.current[i] = el)} className="will-transform">
                     <span
-                      className="hero-letter block select-none font-display font-black leading-[0.8] text-ink transition-transform duration-300 ease-out group-hover/letter:-translate-y-3 group-hover/letter:scale-[1.03]"
+                      className="hero-letter block select-none font-display font-black leading-[0.8] text-ink transition-all duration-300 ease-out group-hover/letter:-translate-y-3 group-hover/letter:scale-[1.04]"
                       style={{
-                        fontSize: "clamp(6rem, 24vw, 23rem)",
-                        letterSpacing: "-0.04em",
-                        textShadow: "0 14px 0 rgba(0,0,0,0.3)",
+                        fontSize: "clamp(7.5rem, 30vw, 26rem)",
+                        letterSpacing: "-0.05em",
+                        backgroundImage: LETTER_PAINT[i],
+                        backgroundSize: "100% 240%",
+                        backgroundPosition: "50% 0%",
+                        color: "transparent",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextStroke: "5px rgba(0,0,0,0.9)",
+                        paintOrder: "stroke fill",
+                        filter: "drop-shadow(0 16px 0 rgba(0,0,0,0.35))",
                         transform: "translateZ(0)",
                       }}
                     >
@@ -422,6 +463,42 @@ export default function Hero() {
               ))}
             </div>
 
+            {/* ghost headline layered behind / through the stickers */}
+            <div className="pointer-events-none relative z-0 mt-[2.2vh] flex w-full max-w-[92vw] flex-col items-center md:-mt-[1vh]">
+              <h2
+                className="hero-ghost whitespace-nowrap font-display font-black leading-[0.86] tracking-tight"
+                style={{
+                  fontSize: "clamp(1.35rem, 3.1vw, 3.4rem)",
+                  color: "transparent",
+                  WebkitTextStroke: "1.5px rgba(0,0,0,0.55)",
+                }}
+              >
+                CREATIVE DEVELOPER
+              </h2>
+              <h2
+                className="hero-ghost whitespace-nowrap font-display font-black leading-[0.86] tracking-tight"
+                style={{
+                  fontSize: "clamp(1.35rem, 3.1vw, 3.4rem)",
+                  color: "#f5f5f3",
+                  textShadow: "4px 5px 0 rgba(0,0,0,0.85)",
+                }}
+              >
+                AI ENGINEER
+              </h2>
+            </div>
+
+            {/* role stickers flanking the headline on desktop */}
+            <div className="hero-chip pointer-events-none absolute left-[3%] top-[24%] z-30 hidden -rotate-12 md:block">
+              <span className="inline-block rounded-2xl border-[3px] border-ink bg-gold px-3 py-1.5 font-mono text-[10px] font-black tracking-[0.18em] text-ink" style={{ boxShadow: "4px 5px 0 rgba(0,0,0,0.5)" }}>
+                FULL STACK
+              </span>
+            </div>
+            <div className="hero-chip pointer-events-none absolute right-[3%] top-[30%] z-30 hidden rotate-12 md:block">
+              <span className="inline-block rounded-2xl border-[3px] border-ink bg-paper px-3 py-1.5 font-mono text-[10px] font-black tracking-[0.18em] text-ink" style={{ boxShadow: "4px 5px 0 rgba(0,0,0,0.5)" }}>
+                WEBGL ✕ MOTION
+              </span>
+            </div>
+
             {/* floating props — each its own speed, its own depth */}
             <div data-float="a" data-layer="1.6" className="pointer-events-none absolute left-[6%] top-[14%] z-20 will-transform md:left-[8%] md:top-[16%]">
               <div className="floaty">
@@ -441,10 +518,10 @@ export default function Hero() {
             <div data-float="d" data-layer="1.4" className="pointer-events-none absolute right-[22%] bottom-[20%] z-20 will-transform md:right-[24%] md:bottom-[18%]">
               <div className="floaty" style={{ animationDelay: "-0.8s" }}>
                 <svg viewBox="0 0 100 100" className="h-9 w-9 md:h-16 md:w-16" aria-hidden="true">
-                  <g stroke="#050508" strokeWidth="7" fill="none" strokeLinecap="round">
+                  <g stroke="#000000" strokeWidth="7" fill="none" strokeLinecap="round">
                     <circle cx="50" cy="50" r="40" fill="#ffcf3f" />
-                    <circle cx="36" cy="42" r="5" fill="#050508" />
-                    <circle cx="64" cy="42" r="5" fill="#050508" />
+                    <circle cx="36" cy="42" r="5" fill="#000000" />
+                    <circle cx="64" cy="42" r="5" fill="#000000" />
                     <path d="M32 62 q18 16 36 0" />
                   </g>
                 </svg>
@@ -492,11 +569,26 @@ export default function Hero() {
           </div>
         </div>
 
+        {/* rubber-stamp "OPEN FOR WORK" — corner of the stage */}
+        <div data-stamp className="pointer-events-none absolute bottom-[13%] left-1/2 z-40 hidden -translate-x-1/2 md:block">
+          <div
+            className="grid place-items-center rounded-full border-[5px] border-ink bg-lime px-8 py-8 text-center font-display font-black leading-tight text-ink"
+            style={{ rotate: "-9deg", boxShadow: "6px 7px 0 rgba(0,0,0,0.5)", fontSize: "clamp(0.85rem, 1.15vw, 1.25rem)", letterSpacing: "0.04em" }}
+          >
+            <span>
+              OPEN FOR
+              <br />
+              WORK
+              <br />
+              <span style={{ fontSize: "0.72em" }}>★ 2026 ★</span>
+            </span>
+          </div>
+        </div>
+
         {/* ============ THE REVEAL — mew's second page, ink world ============ */}
         <div
           data-reveal
-          className="absolute inset-0 z-[60] flex flex-col items-center justify-center overflow-hidden bg-[#050508] will-transform"
-          style={{ clipPath: "inset(100% 0% 0% 0%)", pointerEvents: "none" }}
+          className="absolute inset-0 z-[60] flex flex-col items-center justify-center overflow-hidden bg-[#000000] will-transform"
         >
           <div className="halftone absolute inset-0 opacity-[0.07] invert" aria-hidden="true" />
           <p data-reveal-text className="mb-4 font-mono text-[10px] font-bold tracking-[0.5em] text-lime md:text-xs">

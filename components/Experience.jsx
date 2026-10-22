@@ -63,17 +63,17 @@ export default function Experience() {
           card,
           {
             x: window.innerWidth >= 768 ? (i % 2 === 0 ? 110 : -110) : 60,
-            z: -150,
+            scale: 0.85,
             opacity: 0,
             rotate: i % 2 === 0 ? 6 : -6,
           },
           {
             x: 0,
-            z: 0,
+            scale: 1,
             opacity: 1,
             rotate: i % 2 === 0 ? -2 : 2,
             duration: 1,
-            ease: "back.out(1.4)",
+            ease: "power3.out",
             scrollTrigger: { trigger: el, start: "top 78%" },
           }
         );
@@ -84,18 +84,11 @@ export default function Experience() {
           {
             scale: 1,
             rotate: 0,
-            duration: 0.5,
-            ease: "back.out(2.5)",
+            duration: 0.6,
+            ease: "back.out(2)",
             scrollTrigger: { trigger: el, start: "top 72%" },
           }
         );
-
-        // cards sway against the scroll — parallax even on a timeline
-        gsap.to(card, {
-          y: i % 2 === 0 ? -26 : 26,
-          ease: "none",
-          scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
-        });
       });
 
       // travel-the-years heading
@@ -118,7 +111,7 @@ export default function Experience() {
         { yPercent: 30, opacity: 0.0 },
         {
           yPercent: -10,
-          opacity: 0.35,
+          opacity: 0.22,
           ease: "none",
           scrollTrigger: { trigger: "[data-timeline]", start: "top bottom", end: "bottom top", scrub: true },
         }
@@ -137,7 +130,7 @@ export default function Experience() {
       <h2
         data-year-ghost
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[30%] -translate-x-1/2 whitespace-nowrap font-display text-[26vw] font-black leading-none text-stroke-thin"
+        className="pointer-events-none absolute left-1/2 top-[30%] -translate-x-1/2 whitespace-nowrap font-display text-[26vw] font-black leading-none text-stroke-thin will-transform"
       >
         2023→26
       </h2>
@@ -155,7 +148,7 @@ export default function Experience() {
           </span>
           <span className="mask-line">
             <span className="inline-block text-[clamp(2.8rem,10vw,8rem)] will-transform">
-              <span style={{ color: "#050508" }}>SO FAR</span>
+              <span style={{ color: "#000000" }}>SO FAR</span>
             </span>
           </span>
         </h2>

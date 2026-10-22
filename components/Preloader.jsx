@@ -17,13 +17,25 @@ export default function Preloader() {
     window.__lenis?.stop();
 
     const finish = () => {
+      if (window.__appReady) return;
+      window.__appReady = true;
       window.dispatchEvent(new Event("app:ready"));
       window.__lenis?.start();
     };
 
     const tl = gsap.timeline({ onComplete: finish });
 
+    // absolute fail-safe: if anything stalls (slow font/webgl on first
+    // visit), force the door open and fire app:ready anyway
+    const failsafe = window.setTimeout(() => {
+      if (window.__appReady) return;
+      // snap the timeline to its end so the door is up, then announce
+      tl.progress(1);
+      finish();
+    }, 6000);
+
     if (reduce) {
+      window.clearTimeout(failsafe);
       tl.set(root, { opacity: 0 }).set(root, { display: "none" }).duration(0.01);
       return () => {
         window.__lenis?.start();
@@ -71,6 +83,7 @@ export default function Preloader() {
       .set(root, { display: "none" });
 
     return () => {
+      window.clearTimeout(failsafe);
       tl.kill();
       window.__lenis?.start();
     };

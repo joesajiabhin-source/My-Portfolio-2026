@@ -22,14 +22,14 @@ export default function Contact() {
       // the ink finale rises like night falling over the red world
       gsap.fromTo(
         rootRef.current,
-        { clipPath: "inset(12% 3% 0% 3% round 60px)" },
+        { clipPath: "ellipse(105% 62% at 50% 100%)" },
         {
-          clipPath: "inset(0% 0% 0% 0% round 0px)",
+          clipPath: "ellipse(140% 105% at 50% 100%)",
           ease: "none",
           scrollTrigger: {
             trigger: rootRef.current,
             start: "top bottom",
-            end: "top 35%",
+            end: "top 30%",
             scrub: 0.5,
           },
         }
@@ -125,7 +125,7 @@ export default function Contact() {
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[130vmin] w-[130vmin] -translate-x-1/2 -translate-y-1/2 will-transform"
       >
-        <div className="h-full w-full rounded-full border-[3px] border-dashed border-lime/25" />
+        <div className="absolute inset-0 rounded-full border-[3px] border-dashed border-lime/25" />
         <div className="absolute inset-[14%] rounded-full border-[3px] border-red/40" />
         <div className="absolute inset-[28%] rounded-full border border-paper/10" />
         <div className="absolute inset-[40%] rounded-full border-2 border-blush/20" />
@@ -133,11 +133,11 @@ export default function Contact() {
 
       {/* stamp */}
       <div
-        data-stamp
+        data-stamp-wrap
         className="absolute right-[8%] top-[12%] hidden md:block"
         aria-hidden="true"
       >
-        <div className="grid h-24 w-24 place-items-center rounded-full border-4 border-lime bg-ink/40 text-center backdrop-blur-sm">
+        <div data-stamp className="grid h-24 w-24 place-items-center rounded-full border-4 border-lime bg-ink/40 text-center backdrop-blur-sm">
           <p className="font-display text-[10px] font-black leading-tight tracking-[0.1em] text-lime">
             OPEN FOR
             <br />

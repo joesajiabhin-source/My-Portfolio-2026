@@ -154,7 +154,7 @@ export default function About() {
     <section
       id="about"
       ref={rootRef}
-      className="relative z-10 overflow-hidden px-5 pb-[16vh] pt-[16vh] md:px-10"
+      className="relative z-10 overflow-hidden rounded-t-[48px] bg-red px-5 pb-[14vh] pt-[14vh] shadow-[0_-14px_40px_rgba(0,0,0,0.35)] md:rounded-t-[72px] md:px-10"
     >
       {/* travelling outline backdrop — depth behind everything */}
       <h2
@@ -223,7 +223,7 @@ export default function About() {
               style={{ transform: "rotate(3deg)" }}
             >
               <div data-sheen className="absolute inset-0 z-10 opacity-70" />
-              <div className="relative rounded-[22px] bg-gradient-to-b from-[#141420] to-[#050508] p-6">
+              <div className="relative rounded-[22px] bg-gradient-to-b from-[#000000] to-[#000000] p-6">
                 <div className="flex items-center justify-between">
                   <p className="font-mono text-[9px] font-bold tracking-[0.35em] text-lime">AJS&nbsp;/&nbsp;ID&nbsp;CARD</p>
                   <span className="rounded-full bg-lime px-2.5 py-1 font-mono text-[8px] font-black tracking-[0.2em] text-ink">
@@ -235,19 +235,19 @@ export default function About() {
                 <div className="mx-auto mt-6 w-40 [transform:translateZ(40px)]">
                   <svg viewBox="0 0 160 130" className="w-full">
                     <circle cx="80" cy="65" r="58" fill="#ed0000" opacity="0.2" />
-                    <g stroke="#050508" strokeLinejoin="round" strokeLinecap="round">
+                    <g stroke="#000000" strokeLinejoin="round" strokeLinecap="round">
                       <path d="M40 52 L33 10 L72 32 Z" fill="#fff" strokeWidth="5" />
                       <path d="M120 52 L127 10 L88 32 Z" fill="#fff" strokeWidth="5" />
                       <path d="M43 44 L40 20 L64 33 Z" fill="#f6a8d7" strokeWidth="0" />
                       <path d="M117 44 L120 20 L96 33 Z" fill="#f6a8d7" strokeWidth="0" />
                       <circle cx="80" cy="72" r="44" fill="#fff" strokeWidth="5" />
                       {/* shades — this dev means business */}
-                      <rect x="42" y="60" width="34" height="18" rx="8" fill="#050508" />
-                      <rect x="84" y="60" width="34" height="18" rx="8" fill="#050508" />
-                      <path d="M76 66 h8" stroke="#050508" strokeWidth="5" fill="none" />
+                      <rect x="42" y="60" width="34" height="18" rx="8" fill="#000000" />
+                      <rect x="84" y="60" width="34" height="18" rx="8" fill="#000000" />
+                      <path d="M76 66 h8" stroke="#000000" strokeWidth="5" fill="none" />
                       <path d="M74 62 l-8 -2 M86 62 l8 -2" stroke="#f5f5f3" strokeWidth="3" fill="none" opacity="0.7" />
                       <path d="M74 96 q-4 4 -8 2 M86 96 q4 4 8 2 M80 90 v7" fill="none" strokeWidth="3" transform="translate(-80 0) translate(80 0)" />
-                      <path d="M76 86 h8 l-4 5 z" fill="#050508" strokeWidth="0" />
+                      <path d="M76 86 h8 l-4 5 z" fill="#000000" strokeWidth="0" />
                     </g>
                   </svg>
                 </div>

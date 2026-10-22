@@ -17,15 +17,15 @@ const LINKS = [
 function CatMark({ className = "h-8 w-8" }) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true">
-      <g stroke="#050508" strokeLinejoin="round" strokeLinecap="round">
+      <g stroke="#000000" strokeLinejoin="round" strokeLinecap="round">
         <path d="M18 46 L12 8 L46 26 Z" fill="#ffffff" strokeWidth="6" />
         <path d="M82 46 L88 8 L54 26 Z" fill="#ffffff" strokeWidth="6" />
         <path d="M21 38 L18 16 L40 28 Z" fill="#f6a8d7" strokeWidth="0" />
         <path d="M79 38 L82 16 L60 28 Z" fill="#f6a8d7" strokeWidth="0" />
         <circle cx="50" cy="58" r="34" fill="#ffffff" strokeWidth="6" />
-        <path d="M33 58 Q39 53 45 58 Q39 63 33 58 Z M55 58 Q61 53 67 58 Q61 63 55 58 Z" fill="#050508" strokeWidth="0" />
+        <path d="M33 58 Q39 53 45 58 Q39 63 33 58 Z M55 58 Q61 53 67 58 Q61 63 55 58 Z" fill="#000000" strokeWidth="0" />
         <path d="M23 44 q4 6 0 9 q-4 -3 0 -9 M77 44 q4 6 0 9 q-4 -3 0 -9" fill="#8fd6ff" strokeWidth="0" />
-        <path d="M46 70 h8 l-4 5 z" fill="#050508" strokeWidth="0" />
+        <path d="M46 70 h8 l-4 5 z" fill="#000000" strokeWidth="0" />
         <path d="M50 75 q-4 4 -8 2 M50 75 q4 4 8 2" fill="none" strokeWidth="3" />
       </g>
     </svg>
@@ -39,12 +39,16 @@ export default function Nav() {
   const openTl = useRef(null);
 
   useEffect(() => {
-    // Nav pops in once the hero intro finishes (mew chrome rides above everything)
-    gsap.fromTo(
-      navRef.current,
-      { y: -60, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.9, ease: "back.out(1.6)", delay: 4.2 }
-    );
+    // Nav pops in once the preloader lifts (driven by app:ready, with a safety timeout)
+    let safety;
+    const popIn = () => {
+      gsap.to(navRef.current, { y: 0, opacity: 1, duration: 0.9, ease: "back.out(1.6)", overwrite: "auto" });
+    };
+    if (window.__appReady) popIn();
+    else {
+      window.addEventListener("app:ready", popIn, { once: true });
+      safety = window.setTimeout(popIn, 5000);
+    }
 
     const showAnim = gsap
       .from(navRef.current, { yPercent: -130, paused: true, duration: 0.4, ease: "power3.out" })
@@ -54,8 +58,9 @@ export default function Nav() {
       start: "top top",
       end: "max",
       onUpdate: (self) => {
+        if (open) return;
         if (self.direction === -1) showAnim.play();
-        else if (self.scroll() > 140 && !open) showAnim.reverse();
+        else if (self.scroll() > 140) showAnim.reverse();
       },
     });
 
@@ -74,6 +79,8 @@ export default function Nav() {
       .fromTo("[data-menu-foot]", { opacity: 0 }, { opacity: 1, duration: 0.4 }, "-=0.25");
 
     return () => {
+      window.removeEventListener("app:ready", popIn);
+      window.clearTimeout(safety);
       openTl.current?.kill();
     };
   }, [open]);
@@ -129,7 +136,7 @@ export default function Nav() {
               className="inline-block transition-transform duration-300"
               style={{ transform: open ? "rotate(180deg)" : "rotate(0)" }}
             >
-              <svg viewBox="0 0 16 10" className="h-2.5 w-4"><path d="M1 1l7 7 7-7" stroke="#050508" strokeWidth="2.6" fill="none" strokeLinecap="round" /></svg>
+              <svg viewBox="0 0 16 10" className="h-2.5 w-4"><path d="M1 1l7 7 7-7" stroke="#000000" strokeWidth="2.6" fill="none" strokeLinecap="round" /></svg>
             </span>
           </button>
 
